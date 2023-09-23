@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"strconv"
+	"time"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
@@ -16,10 +18,10 @@ func main () {
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
 		}
-	
+
 		// Update the message type to return back.
 		body["type"] = "generate_ok"
-		body["id"] = "123"
+		body["id"] = strconv.FormatInt(time.Now().UnixNano(), 10) + n.ID()
 	
 		// Echo the original message back with the updated message type.
 		return n.Reply(msg, body)
